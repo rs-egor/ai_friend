@@ -1,0 +1,19 @@
+# Frontend Development Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Копирование package файлов
+COPY package*.json ./
+
+# Установка зависимостей
+RUN npm install
+
+# Копирование исходного кода
+COPY . .
+
+# Отладочный порт для Vite
+EXPOSE 8080
+
+# Запуск в режиме разработки
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
