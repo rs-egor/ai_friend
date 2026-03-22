@@ -1,3 +1,4 @@
+import { useLang } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Memory } from "@/types";
@@ -11,16 +12,14 @@ interface MemoryPanelProps {
 }
 
 export const MemoryPanel = ({ memories, isOpen, onClose }: MemoryPanelProps) => {
+  const { t } = useLang();
+
   if (!isOpen) return null;
 
   const getTypeLabel = (type: string) => {
-    const labels: Record<string, string> = {
-      fact: "Факт",
-      preference: "Предпочтение",
-      event: "Событие",
-      relationship: "Отношения",
-    };
-    return labels[type] || type;
+    const key = `chat.memory_type_${type}`;
+    const translated = t(key);
+    return translated !== key ? translated : type;
   };
 
   const getTypeColor = (type: string) => {
@@ -38,7 +37,7 @@ export const MemoryPanel = ({ memories, isOpen, onClose }: MemoryPanelProps) => 
       <div className="flex items-center justify-between border-b p-4">
         <div className="flex items-center gap-2">
           <Brain className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Память</h3>
+          <h3 className="font-semibold">{t("chat.memory_panel_title")}</h3>
         </div>
         <button
           onClick={onClose}
@@ -53,7 +52,7 @@ export const MemoryPanel = ({ memories, isOpen, onClose }: MemoryPanelProps) => 
           <div className="text-center text-muted-foreground py-8">
             <Brain className="mx-auto mb-2 h-8 w-8 opacity-20" />
             <p className="text-sm">
-              Воспоминания появятся после общения
+              {t("chat.memory_empty")}
             </p>
           </div>
         ) : (

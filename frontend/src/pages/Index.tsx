@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/UserMenu";
 import LanguageSwitcher from "@/components/landing/LanguageSwitcher";
@@ -18,6 +18,7 @@ import FinalCTASection from "@/components/landing/FinalCTASection";
 
 const Index = () => {
   const { isAuthenticated, isLoading } = useAuth();
+  const { t } = useLang();
   const navigate = useNavigate();
 
   const handleStartChat = () => {
@@ -29,19 +30,14 @@ const Index = () => {
   };
 
   return (
-    <LanguageProvider>
+    <div>
       <div className="fixed top-4 right-4 z-50 flex gap-2">
         {isLoading ? null : isAuthenticated ? (
           <UserMenu />
         ) : (
-          <>
-            <Button variant="outline" size="sm" asChild>
-              <Link to="/login">Войти</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link to="/register">Регистрация</Link>
-            </Button>
-          </>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/login">{t("auth.login.submit_button")}</Link>
+          </Button>
         )}
       </div>
       <LanguageSwitcher />
@@ -58,7 +54,7 @@ const Index = () => {
         <TestimonialsSection />
         <FinalCTASection />
       </main>
-    </LanguageProvider>
+    </div>
   );
 };
 

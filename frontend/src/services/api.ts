@@ -105,8 +105,12 @@ export const friendsApi = {
 
 // Chat API
 export const chatApi = {
-  send: async (message: string, friendId: number) => {
-    const response = await api.post('/chat/send', { message, friend_id: friendId });
+  send: async (message: string, friendId: number, language?: string) => {
+    const response = await api.post('/chat/send', { 
+      message, 
+      friend_id: friendId,
+      language: language || 'ru',
+    });
     return response.data;
   },
   

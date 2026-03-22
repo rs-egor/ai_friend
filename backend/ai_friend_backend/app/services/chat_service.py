@@ -23,6 +23,7 @@ class ChatService:
         user: User,
         friend_id: int,
         user_message: str,
+        language: str = "ru",
     ) -> dict:
         """Отправить сообщение и получить ответ от AI с учётом памяти"""
 
@@ -89,6 +90,7 @@ class ChatService:
             },
             conversation_history=conversation_history,
             memories=[m.content for m in relevant_memories],
+            language=language,
         )
 
         # Сохранение сообщений в БД

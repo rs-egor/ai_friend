@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useChat } from "@/hooks/useChat";
 import { useFriends } from "@/hooks/useChat";
+import { useLang } from "@/contexts/LanguageContext";
 import { UserMenu } from "@/components/UserMenu";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { MessageInput } from "@/components/chat/MessageInput";
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 const Chat = () => {
   const { friendId } = useParams<{ friendId: string }>();
   const navigate = useNavigate();
+  const { t } = useLang();
   const { friends, loadFriends } = useFriends();
   const [selectedFriendId, setSelectedFriendId] = useState<number | null>(
     friendId ? parseInt(friendId) : null
@@ -55,7 +57,7 @@ const Chat = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h2 className="text-lg font-semibold">Чаты</h2>
+          <h2 className="text-lg font-semibold">{t("chat.sidebar_title")}</h2>
         </div>
         <ScrollArea className="h-[calc(100vh-65px)]">
           <div className="p-2">
@@ -88,13 +90,13 @@ const Chat = () => {
             {friends.length === 0 && (
               <div className="p-4 text-center text-sm text-muted-foreground">
                 <Users className="mx-auto mb-2 h-8 w-8 opacity-50" />
-                <p>Нет друзей</p>
+                <p>{t("chat.no_friends")}</p>
                 <Button
                   variant="link"
                   className="mt-2"
                   onClick={() => navigate("/friends")}
                 >
-                  Создать друга
+                  {t("chat.create_friend")}
                 </Button>
               </div>
             )}
@@ -126,7 +128,7 @@ const Chat = () => {
                   )}
                 >
                   <Brain className="h-4 w-4 mr-2" />
-                  Память
+                  {t("chat.memory_button")}
                 </Button>
                 <UserMenu />
               </div>
@@ -142,7 +144,7 @@ const Chat = () => {
           <div className="flex flex-1 items-center justify-center text-muted-foreground">
             <div className="text-center">
               <Users className="mx-auto mb-4 h-16 w-16 opacity-20" />
-              <p className="text-lg">Выберите друга для начала чата</p>
+              <p className="text-lg">{t("chat.select_friend")}</p>
             </div>
           </div>
         )}

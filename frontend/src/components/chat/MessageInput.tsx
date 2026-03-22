@@ -1,4 +1,5 @@
 import { useState, FormEvent, useRef, useEffect } from "react";
+import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
@@ -10,6 +11,7 @@ interface MessageInputProps {
 }
 
 export const MessageInput = ({ onSend, isLoading, disabled }: MessageInputProps) => {
+  const { t } = useLang();
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -34,7 +36,7 @@ export const MessageInput = ({ onSend, isLoading, disabled }: MessageInputProps)
         ref={textareaRef}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Напишите сообщение..."
+        placeholder={t("chat.message_input_placeholder")}
         className="flex-1 resize-none min-h-[50px] max-h-[150px]"
         disabled={disabled || isLoading}
         onKeyDown={(e) => {

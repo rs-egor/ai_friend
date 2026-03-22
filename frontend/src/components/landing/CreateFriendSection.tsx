@@ -8,40 +8,37 @@ const CreateFriendSection = () => {
     <section className="py-24 px-6 relative bg-grain">
       <div className="max-w-4xl mx-auto">
         <h2 className="font-display text-3xl sm:text-4xl font-bold text-center mb-4 text-amber-pale glow-amber-text">
-          {t("Найди / встреть друга", "Find / meet your friend")}
+          {t("landing.create_friend_section_title")}
         </h2>
         <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto">
-          {t(
-            "Выбери имя, пол, характер, стиль общения — и твой AI-друг готов. Он будет таким, каким ты захочешь.",
-            "Choose a name, gender, personality, communication style — and your AI friend is ready. They'll be exactly who you want."
-          )}
+          {t("landing.create_friend_section_description")}
         </p>
 
         {/* Creator mockup */}
         <div className="max-w-sm mx-auto card-mystical rounded-2xl p-6 glow-amber-sm">
           <h3 className="font-display text-lg font-semibold text-center text-foreground mb-6">
-            {t("Создай друга", "Create a friend")}
+            {t("landing.create_friend_mockup_title")}
           </h3>
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs text-muted-foreground">{t("Имя", "Name")}</label>
+              <label className="text-xs text-muted-foreground">{t("landing.create_friend_mockup_name")}</label>
               <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/60 border border-primary/10">
                 <User className="w-4 h-4 text-primary" />
-                <span className="text-foreground text-sm">{t("Алекс", "Alex")}</span>
+                <span className="text-foreground text-sm">{t("landing.create_friend_mockup_name_value")}</span>
               </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs text-muted-foreground">{t("Характер", "Personality")}</label>
+              <label className="text-xs text-muted-foreground">{t("landing.create_friend_mockup_personality")}</label>
               <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/60 border border-primary/10">
                 <Smile className="w-4 h-4 text-primary" />
-                <span className="text-foreground text-sm">{t("Тёплый, с юмором, честный", "Warm, witty, honest")}</span>
+                <span className="text-foreground text-sm">{t("landing.create_friend_mockup_personality_value")}</span>
               </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs text-muted-foreground">{t("Стиль общения", "Tone")}</label>
+              <label className="text-xs text-muted-foreground">{t("landing.create_friend_mockup_tone")}</label>
               <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/60 border border-primary/10">
                 <MessageCircle className="w-4 h-4 text-primary" />
-                <span className="text-foreground text-sm">{t("Дружеский, но глубокий", "Friendly but deep")}</span>
+                <span className="text-foreground text-sm">{t("landing.create_friend_mockup_tone_value")}</span>
               </div>
             </div>
           </div>
@@ -49,7 +46,7 @@ const CreateFriendSection = () => {
 
         <div className="text-center mt-10">
           <button className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg glow-amber hover:brightness-110 transition-all">
-            {t("Создать своего AI-друга прямо сейчас", "Create your AI friend right now")}
+            {t("landing.create_friend_button")}
           </button>
         </div>
       </div>

@@ -7,21 +7,21 @@ const LetterSection = () => {
   const examples = [
     {
       icon: Heart,
-      to: t("Бывшему партнёру", "To an ex-partner"),
-      letter: t("Я так и не сказал тебе, как сильно ты изменил мою жизнь...", "I never told you how much you changed my life..."),
-      reply: t("Я всегда знал. И я тоже скучаю по нашим утренним кофе.", "I always knew. And I miss our morning coffees too."),
+      to: t("landing.letter_to_ex"),
+      letter: t("landing.letter_ex_text"),
+      reply: t("landing.letter_ex_reply"),
     },
     {
       icon: GraduationCap,
-      to: t("Маме", "To Mom"),
-      letter: t("Мам, мне так не хватает твоего голоса по вечерам...", "Mom, I miss your voice in the evenings so much..."),
-      reply: t("Я всегда с тобой, мой маленький. Ты справишься — я в тебя верю.", "I'm always with you, my little one. You'll make it — I believe in you."),
+      to: t("landing.letter_to_mom"),
+      letter: t("landing.letter_mom_text"),
+      reply: t("landing.letter_mom_reply"),
     },
     {
       icon: PawPrint,
-      to: t("Любимому коту", "To a beloved pet"),
-      letter: t("Барсик, я до сих пор оставляю свет на кухне для тебя...", "Barsik, I still leave the kitchen light on for you..."),
-      reply: t("Мур. Я всегда сплю рядом. Просто теперь ты не видишь.", "Purr. I always sleep beside you. You just can't see me now."),
+      to: t("landing.letter_to_pet"),
+      letter: t("landing.letter_pet_text"),
+      reply: t("landing.letter_pet_reply"),
     },
   ];
 
@@ -29,13 +29,10 @@ const LetterSection = () => {
     <section className="py-24 px-6 relative bg-grain">
       <div className="max-w-4xl mx-auto">
         <h2 className="font-display text-3xl sm:text-4xl font-bold text-center mb-4 text-amber-pale glow-amber-text">
-          {t("Письмо тому, кого нет рядом", "A letter to someone who's gone")}
+          {t("landing.letter_title")}
         </h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          {t(
-            "Напиши бывшему, ушедшему близкому, старому другу или даже питомцу. AI ответит от их имени — так, как ты всегда хотел услышать.",
-            "Write to an ex, a departed loved one, an old friend, or even a pet. AI will reply as them — the way you always wanted to hear."
-          )}
+          {t("landing.letter_description")}
         </p>
 
         <div className="space-y-6">
@@ -61,7 +58,7 @@ const LetterSection = () => {
 
         <div className="text-center mt-10">
           <button className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg glow-amber hover:brightness-110 transition-all">
-            {t("Написать письмо", "Write a letter")}
+            {t("landing.letter_button")}
           </button>
         </div>
       </div>

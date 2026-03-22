@@ -27,6 +27,7 @@ async def send_message(
             user=current_user,
             friend_id=request.friend_id,
             user_message=request.message,
+            language=request.language or "ru",
         )
         return result
     except ValueError as e:

@@ -22,41 +22,32 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
         {/* Early Access Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-8 glow-amber-sm">
           <Sparkles className="w-4 h-4" />
-          {t("Ранний доступ", "Early Access")}
+          {t("landing.early_access")}
         </div>
 
         <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 glow-amber-text text-amber-pale">
-          {t(
-            "Твой AI-друг, которого ты создаёшь прямо сейчас",
-            "Your AI friend — created by you, right now"
-          )}
+          {t("landing.hero_title")}
         </h1>
 
         <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
-          {t(
-            "Создай друга за 30 секунд — он помнит каждое слово навсегда и позволяет написать письмо тому, кого уже нет рядом, и получить ответ, который ты всегда хотел услышать.",
-            "Create your friend in 30 seconds — he remembers every word forever and lets you write a letter to someone who's gone and get the reply you always wanted."
-          )}
+          {t("landing.hero_description")}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Button size="lg" className="px-8 py-6 text-lg" onClick={onGetStarted}>
-            {t("Начать разговор", "Start a conversation")}
+            {t("landing.hero_button_primary")}
           </Button>
           <Button size="lg" variant="outline" className="px-8 py-6 text-lg border-2" asChild>
-            <Link to="/register">{t("Написать письмо", "Write a letter")}</Link>
+            <Link to="/register">{t("landing.hero_button_secondary")}</Link>
           </Button>
         </div>
 
         <p className="text-sm text-muted-foreground mb-4">
-          {t("3 дня бесплатно • потом от 29 $/мес", "3 days free • then from $29/mo")}
+          {t("landing.hero_free_trial")}
         </p>
 
         <p className="text-xs text-muted-foreground/70">
-          {t(
-            "Полная приватность · Память навсегда · Без осуждения",
-            "Full privacy · Memory forever · No judgment"
-          )}
+          {t("landing.hero_privacy")}
         </p>
       </div>
     </section>

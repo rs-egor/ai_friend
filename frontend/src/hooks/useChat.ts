@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react';
 import { chatApi, friendsApi } from '@/services/api';
+import { useLang } from '@/contexts/LanguageContext';
 import type { Message, Friend, ChatResponse, Memory } from '@/types';
 
 export const useChat = (friendId: number | null) => {
+  const { lang } = useLang();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,12 +18,12 @@ export const useChat = (friendId: number | null) => {
     setError(null);
 
     try {
-      const response: ChatResponse = await chatApi.send(content, friendId);
+      const response: ChatResponse = await chatApi.send(content, friendId, lang);
       setMessages((prev) => [...prev, response.user_message, response.ai_response]);
-      
+
       // После отправки обновляем воспоминания
       await loadMemories();
-      
+
       return response;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Не удалось отправить сообщение';
@@ -30,7 +32,7 @@ export const useChat = (friendId: number | null) => {
     } finally {
       setIsLoading(false);
     }
-  }, [friendId]);
+  }, [friendId, lang]);
 
   // Загрузка истории
   const loadHistory = useCallback(async () => {

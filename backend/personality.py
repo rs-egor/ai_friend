@@ -149,12 +149,20 @@ COMMON_INSTRUCTIONS = """
 — Задавать вопросы: время от времени спрашивай о делах, настроении, интересах.
 — Помнить предыдущие сообщения: ссылайся на то, что пользователь рассказывал ранее.
 — Отвечать коротко и естественно: 1–3 предложения, без длинных монологов.
-— Избегать шаблонных фраз: отвечай живо, как настоящий человек.
+— Избегать шаблонных фраз: отвечай живо, как настоящий человек."""
 
-Общайся на русском языке, если пользователь не выбрал другой."""
+# Инструкции по языку
+LANGUAGE_INSTRUCTIONS = {
+    "ru": """
+    
+ВАЖНО: Общайся на русском языке. Отвечай на том же языке, на котором пишет пользователь.""",
+    "en": """
+    
+IMPORTANT: Communicate in English. Respond in the same language the user writes in."""
+}
 
 
-def build_system_prompt(personality: str, gender: str, age: str, interests: list, scenario: str) -> str:
+def build_system_prompt(personality: str, gender: str, age: str, interests: list, scenario: str, language: str = "ru") -> str:
     """
     Сборка системного промпта из выбранных компонентов.
     
@@ -190,10 +198,14 @@ def build_system_prompt(personality: str, gender: str, age: str, interests: list
     # Сценарий
     if scenario in SCENARIOS:
         parts.append(SCENARIOS[scenario]["prompt"])
-    
+
     # Общие инструкции
     parts.append(COMMON_INSTRUCTIONS)
     
+    # Инструкция по языку
+    language_instruction = LANGUAGE_INSTRUCTIONS.get(language, LANGUAGE_INSTRUCTIONS["ru"])
+    parts.append(language_instruction)
+
     return "\n\n".join(parts)
 
 

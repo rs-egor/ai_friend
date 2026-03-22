@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,53 +8,9 @@ import { toast } from "sonner";
 import { ArrowLeft, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Данные из personality.py
-const PERSONALITY_PRESETS = [
-  { id: "friend", name: "Друг", description: "Дружелюбный собеседник для повседневного общения" },
-  { id: "assistant", name: "Помощник", description: "Профессиональный помощник для решения задач" },
-  { id: "mentor", name: "Наставник", description: "Опытный советчик для карьеры и развития" },
-  { id: "companion", name: "Спутник", description: "Тёплый собеседник для душевных разговоров" },
-  { id: "tutor", name: "Репетитор", description: "Терпеливый учитель для изучения нового" },
-  { id: "creative", name: "Творец", description: "Креативная личность для генерации идей" },
-];
-
-const GENDERS = [
-  { id: "male", name: "Мужской", icon: "👨" },
-  { id: "female", name: "Женский", icon: "👩" },
-  { id: "neutral", name: "Не указан", icon: "👤" },
-];
-
-const AGES = [
-  { id: "teen", name: "Подросток", description: "14-17 лет", icon: "🧒" },
-  { id: "young", name: "Молодой", description: "18-25 лет", icon: "🧑" },
-  { id: "adult", name: "Взрослый", description: "26-45 лет", icon: "👨‍💼" },
-  { id: "mature", name: "Зрелый", description: "46+ лет", icon: "🧓" },
-];
-
-const INTERESTS = [
-  { id: "tech", name: "Технологии", icon: "💻" },
-  { id: "science", name: "Наука", icon: "🔬" },
-  { id: "art", name: "Искусство", icon: "🎨" },
-  { id: "literature", name: "Литература", icon: "📚" },
-  { id: "travel", name: "Путешествия", icon: "✈️" },
-  { id: "psychology", name: "Психология", icon: "🧠" },
-  { id: "career", name: "Карьера", icon: "💼" },
-  { id: "health", name: "Здоровье", icon: "💪" },
-  { id: "games", name: "Игры", icon: "🎮" },
-  { id: "music", name: "Музыка", icon: "🎵" },
-];
-
-const SCENARIOS = [
-  { id: "casual", name: "Повседневный", description: "Дружелюбное общение" },
-  { id: "professional", name: "Деловой", description: "Решение задач" },
-  { id: "emotional", name: "Душевный", description: "Поддержка и забота" },
-  { id: "education", name: "Обучение", description: "Изучение нового" },
-  { id: "mentorship", name: "Наставничество", description: "Глубокие советы" },
-  { id: "creative", name: "Творчество", description: "Генерация идей" },
-];
-
 const CreateFriend = () => {
   const navigate = useNavigate();
+  const { t } = useLang();
   const [name, setName] = useState("");
   const [personality, setPersonality] = useState("");
   const [tone, setTone] = useState("");
@@ -62,6 +19,50 @@ const CreateFriend = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [scenario, setScenario] = useState<string>("casual");
   const [isLoading, setIsLoading] = useState(false);
+
+  const PERSONALITY_PRESETS = [
+    { id: "friend", name: t("personality_presets.friend"), description: t("personality_presets.friend_desc") },
+    { id: "assistant", name: t("personality_presets.assistant"), description: t("personality_presets.assistant_desc") },
+    { id: "mentor", name: t("personality_presets.mentor"), description: t("personality_presets.mentor_desc") },
+    { id: "companion", name: t("personality_presets.companion"), description: t("personality_presets.companion_desc") },
+    { id: "tutor", name: t("personality_presets.tutor"), description: t("personality_presets.tutor_desc") },
+    { id: "creative", name: t("personality_presets.creative"), description: t("personality_presets.creative_desc") },
+  ];
+
+  const GENDERS = [
+    { id: "male", name: t("create_friend.gender_male"), icon: "👨" },
+    { id: "female", name: t("create_friend.gender_female"), icon: "👩" },
+    { id: "neutral", name: t("create_friend.gender_neutral"), icon: "👤" },
+  ];
+
+  const AGES = [
+    { id: "teen", name: t("create_friend.age_teen"), description: t("create_friend.age_teen_desc"), icon: "🧒" },
+    { id: "young", name: t("create_friend.age_young"), description: t("create_friend.age_young_desc"), icon: "🧑" },
+    { id: "adult", name: t("create_friend.age_adult"), description: t("create_friend.age_adult_desc"), icon: "👨‍💼" },
+    { id: "mature", name: t("create_friend.age_mature"), description: t("create_friend.age_mature_desc"), icon: "🧓" },
+  ];
+
+  const INTERESTS = [
+    { id: "tech", name: t("create_friend.interest_tech"), icon: "💻" },
+    { id: "science", name: t("create_friend.interest_science"), icon: "🔬" },
+    { id: "art", name: t("create_friend.interest_art"), icon: "🎨" },
+    { id: "literature", name: t("create_friend.interest_literature"), icon: "📚" },
+    { id: "travel", name: t("create_friend.interest_travel"), icon: "✈️" },
+    { id: "psychology", name: t("create_friend.interest_psychology"), icon: "🧠" },
+    { id: "career", name: t("create_friend.interest_career"), icon: "💼" },
+    { id: "health", name: t("create_friend.interest_health"), icon: "💪" },
+    { id: "games", name: t("create_friend.interest_games"), icon: "🎮" },
+    { id: "music", name: t("create_friend.interest_music"), icon: "🎵" },
+  ];
+
+  const SCENARIOS = [
+    { id: "casual", name: t("create_friend.scenario_casual"), description: t("create_friend.scenario_casual_desc") },
+    { id: "professional", name: t("create_friend.scenario_professional"), description: t("create_friend.scenario_professional_desc") },
+    { id: "emotional", name: t("create_friend.scenario_emotional"), description: t("create_friend.scenario_emotional_desc") },
+    { id: "education", name: t("create_friend.scenario_education"), description: t("create_friend.scenario_education_desc") },
+    { id: "mentorship", name: t("create_friend.scenario_mentorship"), description: t("create_friend.scenario_mentorship_desc") },
+    { id: "creative", name: t("create_friend.scenario_creative"), description: t("create_friend.scenario_creative_desc") },
+  ];
 
   const toggleInterest = (interestId: string) => {
     setSelectedInterests(prev => {
@@ -82,7 +83,7 @@ const CreateFriend = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      toast.error("Введите имя друга");
+      toast.error(t("create_friend.name_label"));
       return;
     }
 
@@ -109,13 +110,13 @@ const CreateFriend = () => {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.detail || "Не удалось создать друга");
+        throw new Error(error.detail || t("create_friend.error"));
       }
 
-      toast.success(`Друг "${name}" создан!`);
+      toast.success(t("create_friend.success").replace("{name}", name));
       navigate("/friends");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Не удалось создать друга";
+      const message = err instanceof Error ? err.message : t("create_friend.error");
       toast.error(message);
     } finally {
       setIsLoading(false);
@@ -137,9 +138,9 @@ const CreateFriend = () => {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-xl font-semibold">Создание AI-друга</h1>
+              <h1 className="text-xl font-semibold">{t("create_friend.page_title")}</h1>
               <p className="text-sm text-muted-foreground">
-                Настройте характер и предпочтения вашего друга
+                {t("create_friend.page_description")}
               </p>
             </div>
           </div>
@@ -152,13 +153,13 @@ const CreateFriend = () => {
           {/* Имя - всегда первое */}
           <div className="space-y-2">
             <label htmlFor="name" className="text-lg font-semibold">
-              Имя друга *
+              {t("create_friend.name_label")}
             </label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Например: Алиса, Макс, София..."
+              placeholder={t("create_friend.name_placeholder")}
               className="text-lg h-12"
               required
               autoFocus
@@ -169,7 +170,7 @@ const CreateFriend = () => {
           <div className="space-y-3">
             <label className="text-lg font-semibold flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-amber-500" />
-              Быстрый выбор личности
+              {t("create_friend.preset_title")}
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {PERSONALITY_PRESETS.map((preset) => (
@@ -199,13 +200,13 @@ const CreateFriend = () => {
           {/* Характер */}
           <div className="space-y-2">
             <label htmlFor="personality" className="text-lg font-semibold">
-              Характер
+              {t("create_friend.personality_label")}
             </label>
             <Textarea
               id="personality"
               value={personality}
               onChange={(e) => setPersonality(e.target.value)}
-              placeholder="Опишите характер друга своими словами..."
+              placeholder={t("create_friend.personality_placeholder")}
               rows={4}
               className="resize-none"
             />
@@ -214,28 +215,28 @@ const CreateFriend = () => {
           {/* Стиль общения - кнопки */}
           <div className="space-y-3">
             <label className="text-lg font-semibold">
-              Стиль общения
+              {t("create_friend.tone_label")}
             </label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { id: "warm", name: "Тёплый", desc: "Заботливый" },
-                { id: "friendly", name: "Дружелюбный", desc: "Открытый" },
-                { id: "professional", name: "Деловой", desc: "Строгий" },
-                { id: "humorous", name: "Весёлый", desc: "С юмором" },
-              ].map((t) => (
+                { id: "warm", name: t("create_friend.tone_warm"), desc: t("create_friend.tone_warm_desc") },
+                { id: "friendly", name: t("create_friend.tone_friendly"), desc: t("create_friend.tone_friendly_desc") },
+                { id: "professional", name: t("create_friend.tone_professional"), desc: t("create_friend.tone_professional_desc") },
+                { id: "humorous", name: t("create_friend.tone_humorous"), desc: t("create_friend.tone_humorous_desc") },
+              ].map((toneOption) => (
                 <Button
-                  key={t.id}
+                  key={toneOption.id}
                   type="button"
                   variant="outline"
                   className={cn(
                     "h-auto flex flex-col items-center gap-1 p-3 transition-all",
-                    tone === t.id && "border-primary bg-primary/5"
+                    tone === toneOption.id && "border-primary bg-primary/5"
                   )}
-                  onClick={() => setTone(tone === t.id ? "" : t.id)}
+                  onClick={() => setTone(tone === toneOption.id ? "" : toneOption.id)}
                 >
-                  {tone === t.id && <Check className="h-4 w-4 text-primary" />}
-                  <span className="font-medium">{t.name}</span>
-                  <span className="text-xs text-muted-foreground">{t.desc}</span>
+                  {tone === toneOption.id && <Check className="h-4 w-4 text-primary" />}
+                  <span className="font-medium">{toneOption.name}</span>
+                  <span className="text-xs text-muted-foreground">{toneOption.desc}</span>
                 </Button>
               ))}
             </div>
@@ -243,7 +244,7 @@ const CreateFriend = () => {
 
           {/* Пол - кнопки */}
           <div className="space-y-3">
-            <label className="text-lg font-semibold">Пол</label>
+            <label className="text-lg font-semibold">{t("create_friend.gender_label")}</label>
             <div className="grid grid-cols-3 gap-3">
               {GENDERS.map((g) => (
                 <Button
@@ -265,7 +266,7 @@ const CreateFriend = () => {
 
           {/* Возраст - кнопки */}
           <div className="space-y-3">
-            <label className="text-lg font-semibold">Возраст</label>
+            <label className="text-lg font-semibold">{t("create_friend.age_label")}</label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {AGES.map((a) => (
                 <Button
@@ -289,7 +290,7 @@ const CreateFriend = () => {
           {/* Интересы - кнопки */}
           <div className="space-y-3">
             <label className="text-lg font-semibold">
-              Интересы <span className="text-muted-foreground font-normal">(максимум 3)</span>
+              {t("create_friend.interests_label")} <span className="text-muted-foreground font-normal">({t("create_friend.interests_max")})</span>
             </label>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {INTERESTS.map((interest) => (
@@ -331,7 +332,7 @@ const CreateFriend = () => {
 
           {/* Сценарий общения - кнопки */}
           <div className="space-y-3">
-            <label className="text-lg font-semibold">Сценарий общения</label>
+            <label className="text-lg font-semibold">{t("create_friend.scenario_label")}</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {SCENARIOS.map((s) => (
                 <Button
@@ -359,14 +360,14 @@ const CreateFriend = () => {
               onClick={() => navigate("/friends")}
               className="min-w-[120px]"
             >
-              Отмена
+              {t("common.cancel")}
             </Button>
             <Button
               type="submit"
               disabled={isLoading || !name.trim()}
               className="min-w-[120px]"
             >
-              {isLoading ? "Создание..." : "Создать друга"}
+              {isLoading ? t("create_friend.submitting") : t("create_friend.submit_button")}
             </Button>
           </div>
         </form>

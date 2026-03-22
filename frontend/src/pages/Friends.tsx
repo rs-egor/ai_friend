@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFriends } from "@/hooks/useChat";
+import { useLang } from "@/contexts/LanguageContext";
 import { UserMenu } from "@/components/UserMenu";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Users, MessageCircle, Trash2, Plus } from "lucide-react";
 
 const Friends = () => {
   const navigate = useNavigate();
+  const { t } = useLang();
   const { friends, isLoading, error, loadFriends, deleteFriend } = useFriends();
 
   useEffect(() => {
@@ -16,13 +18,13 @@ const Friends = () => {
   }, [loadFriends]);
 
   const handleDelete = async (friendId: number, name: string) => {
-    if (!confirm(`Вы уверены, что хотите удалить "${name}"?`)) return;
+    if (!confirm(t("friends.delete_confirm").replace("{name}", name))) return;
 
     const result = await deleteFriend(friendId);
     if (result.success) {
-      toast.success(`Друг "${name}" удалён`);
+      toast.success(t("friends.delete_success").replace("{name}", name));
     } else {
-      toast.error(result.error || "Не удалось удалить друга");
+      toast.error(t("friends.delete_error"));
     }
   };
 
@@ -35,16 +37,16 @@ const Friends = () => {
       <div className="container mx-auto py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Мои друзья</h1>
+            <h1 className="text-3xl font-bold">{t("friends.page_title")}</h1>
             <p className="text-muted-foreground">
-              Управляйте своими AI-друзьями
+              {t("friends.page_description")}
             </p>
           </div>
           <div className="flex items-center gap-4">
             <UserMenu />
             <Button onClick={() => navigate("/create-friend")}>
               <Plus className="mr-2 h-4 w-4" />
-              Создать друга
+              {t("friends.create_button")}
             </Button>
           </div>
         </div>
@@ -60,9 +62,9 @@ const Friends = () => {
         ) : friends.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <Users className="mb-4 h-16 w-16 text-muted-foreground/50" />
-            <h3 className="text-lg font-semibold">Пока нет друзей</h3>
+            <h3 className="text-lg font-semibold">{t("friends.no_friends_title")}</h3>
             <p className="mb-4 text-muted-foreground">
-              Создайте своего первого AI-друга
+              {t("friends.no_friends_description")}
             </p>
           </div>
         ) : (
@@ -88,7 +90,7 @@ const Friends = () => {
                     onClick={() => handleChat(friend.id)}
                   >
                     <MessageCircle className="mr-2 h-4 w-4" />
-                    Чат
+                    {t("friends.chat_button")}
                   </Button>
                   <Button
                     variant="outline"

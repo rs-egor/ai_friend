@@ -6,43 +6,43 @@ const PricingSection = () => {
 
   const plans = [
     {
-      name: t("Пробный период", "Trial"),
-      price: t("Бесплатно", "Free"),
-      period: t("3 дня", "3 days"),
+      name: t("landing.pricing_trial_name"),
+      price: t("landing.pricing_trial_price"),
+      period: t("landing.pricing_trial_period"),
       features: [
-        t("3 дня полного доступа бесплатно", "3 days full access free"),
-        t("Без карты", "No card required"),
-        t("Попробуй без обязательств", "Try with no commitment"),
+        t("landing.pricing_trial_feature_1"),
+        t("landing.pricing_trial_feature_2"),
+        t("landing.pricing_trial_feature_3"),
       ],
-      cta: t("Начать бесплатно", "Start free"),
+      cta: t("landing.pricing_trial_cta"),
       popular: false,
       badge: null,
     },
     {
-      name: t("Ежемесячно", "Monthly"),
+      name: t("landing.pricing_monthly_name"),
       price: "$29",
-      period: t("/мес", "/mo"),
+      period: t("landing.pricing_monthly_period"),
       features: [
-        t("Полный доступ без ограничений", "Full unlimited access"),
-        t("Безлимитные разговоры и письма", "Unlimited chats and letters"),
-        t("Отменить в любой момент", "Cancel anytime"),
+        t("landing.pricing_monthly_feature_1"),
+        t("landing.pricing_monthly_feature_2"),
+        t("landing.pricing_monthly_feature_3"),
       ],
-      cta: t("Подписаться за 29 $/мес", "Subscribe $29/mo"),
+      cta: t("landing.pricing_monthly_cta"),
       popular: true,
-      badge: t("Популярный", "Popular"),
+      badge: t("landing.pricing_monthly_badge"),
     },
     {
-      name: t("Годовой", "Yearly"),
+      name: t("landing.pricing_yearly_name"),
       price: "$299",
-      period: t("/год", "/year"),
+      period: t("landing.pricing_yearly_period"),
       features: [
-        t("Экономия ~41%", "Save ~41%"),
-        t("Самая выгодная цена", "Best value price"),
-        t("Полный доступ на год", "Full access for a year"),
+        t("landing.pricing_yearly_feature_1"),
+        t("landing.pricing_yearly_feature_2"),
+        t("landing.pricing_yearly_feature_3"),
       ],
-      cta: t("Оплатить 299 $ / год", "Pay $299/year"),
+      cta: t("landing.pricing_yearly_cta"),
       popular: false,
-      badge: t("Лучшая цена", "Best value"),
+      badge: t("landing.pricing_yearly_badge"),
     },
   ];
 
@@ -50,10 +50,10 @@ const PricingSection = () => {
     <section className="py-24 px-6 relative bg-grain">
       <div className="max-w-5xl mx-auto">
         <h2 className="font-display text-3xl sm:text-4xl font-bold text-center mb-4 text-amber-pale glow-amber-text">
-          {t("Тарифы", "Pricing")}
+          {t("landing.pricing_title")}
         </h2>
         <p className="text-center text-muted-foreground mb-12">
-          {t("Выбери, как тебе удобнее", "Choose what works for you")}
+          {t("landing.pricing_subtitle")}
         </p>
 
         <div className="grid sm:grid-cols-3 gap-6">
@@ -102,10 +102,7 @@ const PricingSection = () => {
         </div>
 
         <p className="text-center text-xs text-muted-foreground/60 mt-8">
-          {t(
-            "После 3 дней бесплатного периода подписка начинается автоматически. Отменить можно в любой момент.",
-            "After the 3-day free trial, subscription starts automatically. Cancel anytime."
-          )}
+          {t("landing.pricing_disclaimer")}
         </p>
       </div>
     </section>

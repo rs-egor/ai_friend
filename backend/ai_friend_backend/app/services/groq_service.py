@@ -53,6 +53,7 @@ class GroqService:
         user_message: str,
         friend_profile: dict,
         conversation_history: List[Dict[str, str]],
+        language: str = "ru",
     ) -> str:
         """Получить ответ от AI-друга с учётом профиля"""
 
@@ -63,6 +64,7 @@ class GroqService:
             age=friend_profile.get('age', 'adult'),
             interests=friend_profile.get('interests', []),
             scenario=friend_profile.get('scenario', 'casual'),
+            language=language,
         )
 
         # Добавляем кастомный характер и стиль, если указаны
@@ -86,6 +88,7 @@ class GroqService:
         friend_profile: dict,
         conversation_history: List[Dict[str, str]],
         memories: List[str],
+        language: str = "ru",
     ) -> str:
         """Получить ответ от AI-друга с учётом профиля и долговременной памяти"""
 
@@ -96,6 +99,7 @@ class GroqService:
             age=friend_profile.get('age', 'adult'),
             interests=friend_profile.get('interests', []),
             scenario=friend_profile.get('scenario', 'casual'),
+            language=language,
         )
 
         # Добавляем кастомный характер и стиль, если указаны
