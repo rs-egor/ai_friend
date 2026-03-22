@@ -20,15 +20,25 @@ async def init_db():
 
 app = FastAPI(title=settings.APP_NAME)
 
-# CORS - разрешаем все localhost порты для разработки
+# CORS - разрешаем localhost и production домены
+allowed_origins = [
+    "http://localhost:8080",
+    "http://localhost:5173",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:5173",
+    settings.FRONTEND_URL,  # Production URL из .env
+]
+
+# Добавляем Vercel домены если FRONTEND_URL не установлен
+if not settings.FRONTEND_URL or settings.FRONTEND_URL == "http://localhost:8080":
+    allowed_origins.extend([
+        "https://ai-friend-*.vercel.app",
+        "https://ai-friend.vercel.app",
+    ])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8080",
-        "http://localhost:5173",
-        "http://127.0.0.1:8080",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

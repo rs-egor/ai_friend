@@ -24,13 +24,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 # Database (Railway автоматически создаст PostgreSQL)
 DATABASE_URL=postgresql://user:pass@host:5432/railway
 
-# CORS
-FRONTEND_URL=https://your-app.vercel.app
+# CORS - URL вашего Vercel frontend
+FRONTEND_URL=https://ai-friend.vercel.app
 
 # Application
 APP_NAME=AI Friend
 DEBUG=false
 ```
+
+**⚠️ Важно:** Замените `https://ai-friend.vercel.app` на ваш актуальный Vercel домен!
 
 ### 3. Настройка build и start команд
 
