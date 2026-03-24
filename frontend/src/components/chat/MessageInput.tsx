@@ -1,4 +1,4 @@
-import { useState, FormEvent, useRef, useEffect } from "react";
+import { useState, FormEvent, useRef } from "react";
 import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,13 +14,6 @@ export const MessageInput = ({ onSend, isLoading, disabled }: MessageInputProps)
   const { t } = useLang();
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  // Сохраняем фокус после отправки сообщения
-  useEffect(() => {
-    if (!isLoading && textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  }, [isLoading]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
