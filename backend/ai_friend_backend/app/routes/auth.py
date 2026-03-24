@@ -1,12 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.services.auth_service import AuthService
 from app.schemas.user import UserCreate, UserResponse, Token, UserLogin
 from app.utils.security import get_current_user
 from app.models.user import User
-from typing import Optional, Union
 
 router = APIRouter()
 
@@ -31,21 +29,24 @@ async def register(
 
 @router.post("/login", response_model=Token)
 async def login(
-    form_data: Optional[OAuth2PasswordRequestForm] = Depends(),
+    request: Request,
     db: AsyncSession = Depends(get_db),
-    login_data: Optional[UserLogin] = None,
 ):
     """Вход пользователя (получение JWT токена)"""
     auth_service = AuthService(db)
 
-    # Поддержка обоих форматов: form-data и JSON
-    if form_data:
-        email = form_data.username
-        password = form_data.password
-    elif login_data:
-        email = login_data.email
-        password = login_data.password
-    else:
+    # Получаем JSON из запроса
+    try:
+        body = await request.json()
+        email = body.get("email", "")
+        password = body.get("password", "")
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Требуется JSON с полями email и password",
+        )
+
+    if not email or not password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Требуется email и пароль",
