@@ -9,7 +9,7 @@ import { MessageInput } from "@/components/chat/MessageInput";
 import { MemoryPanel } from "@/components/chat/MemoryPanel";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Users, Brain } from "lucide-react";
+import { ArrowLeft, Users, Brain, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Chat = () => {
@@ -21,6 +21,7 @@ const Chat = () => {
     friendId ? parseInt(friendId) : null
   );
   const [showMemoryPanel, setShowMemoryPanel] = useState(false);
+  const [showFriendsSidebar, setShowFriendsSidebar] = useState(false);
 
   const { messages, memories, isLoading, error, sendMessage, loadHistory, clearMessages, loadMemories } =
     useChat(selectedFriendId);
@@ -38,6 +39,13 @@ const Chat = () => {
     }
   }, [selectedFriendId, loadHistory, clearMessages, loadMemories]);
 
+  // Закрываем sidebar при выборе друга на мобильных
+  useEffect(() => {
+    if (selectedFriendId && window.innerWidth < 768) {
+      setShowFriendsSidebar(false);
+    }
+  }, [selectedFriendId]);
+
   const selectedFriend = friends.find((f) => f.id === selectedFriendId);
 
   const handleSend = async (message: string) => {
@@ -46,8 +54,21 @@ const Chat = () => {
 
   return (
     <div className="flex h-screen">
+      {/* Overlay для мобильных */}
+      {showFriendsSidebar && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={() => setShowFriendsSidebar(false)}
+        />
+      )}
+
       {/* Боковая панель со списком друзей */}
-      <div className="w-80 border-r bg-muted/30">
+      <div
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-80 border-r bg-muted/30 transition-transform duration-300 ease-in-out md:static md:translate-x-0",
+          showFriendsSidebar ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
         <div className="flex items-center gap-2 border-b p-4">
           <Button
             variant="ghost"
@@ -110,13 +131,24 @@ const Chat = () => {
           <>
             {/* Заголовок */}
             <div className="flex items-center justify-between border-b p-4">
-              <div>
-                <h3 className="text-lg font-semibold">{selectedFriend.name}</h3>
-                {selectedFriend.personality && (
-                  <p className="text-sm text-muted-foreground">
-                    {selectedFriend.personality}
-                  </p>
-                )}
+              <div className="flex items-center gap-2">
+                {/* Кнопка меню друзей для мобильных */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowFriendsSidebar(!showFriendsSidebar)}
+                  className="md:hidden"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+                <div>
+                  <h3 className="text-lg font-semibold">{selectedFriend.name}</h3>
+                  {selectedFriend.personality && (
+                    <p className="text-sm text-muted-foreground">
+                      {selectedFriend.personality}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <Button
