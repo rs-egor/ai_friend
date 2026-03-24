@@ -22,12 +22,50 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Обработка ошибок авторизации
+// Обработка ошибок авторизации и автоматическое обновление токена
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Если ошибка 401 и запрос ещё не был повторён
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      const refreshToken = localStorage.getItem('refresh_token');
+      if (refreshToken) {
+        try {
+          // Пытаемся обновить токен
+          const response = await axios.post('/api/auth/refresh', {
+            refresh_token: refreshToken,
+          });
+
+          const { access_token, refresh_token: newRefreshToken } = response.data;
+          localStorage.setItem('token', access_token);
+          if (newRefreshToken) {
+            localStorage.setItem('refresh_token', newRefreshToken);
+          }
+
+          // Повторяем оригинальный запрос с новым токеном
+          originalRequest.headers.Authorization = `Bearer ${access_token}`;
+          return api(originalRequest);
+        } catch (refreshError) {
+          // Не удалось обновить токен — выходим
+          localStorage.removeItem('token');
+          localStorage.removeItem('refresh_token');
+          window.location.href = '/login';
+          return Promise.reject(refreshError);
+        }
+      } else {
+        // Нет refresh токена — выходим
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    }
+
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
       window.location.href = '/login';
     }
     return Promise.reject(error);

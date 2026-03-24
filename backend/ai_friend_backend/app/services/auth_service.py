@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models.user import User
 from app.schemas.user import UserCreate
-from app.utils.security import create_access_token
+from app.utils.security import create_access_token, create_refresh_token
 from app.config import settings
 
 
@@ -60,8 +60,8 @@ class AuthService:
 
         return user
 
-    async def create_token(self, user: User) -> str:
-        """Создание JWT токена для пользователя"""
+    async def create_token(self, user: User) -> dict:
+        """Создание JWT токенов для пользователя"""
 
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
@@ -69,4 +69,14 @@ class AuthService:
             expires_delta=access_token_expires,
         )
 
-        return access_token
+        refresh_token_expires = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+        refresh_token = create_refresh_token(
+            data={"sub": user.email},
+            expires_delta=refresh_token_expires,
+        )
+
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "refresh_token": refresh_token,
+        }

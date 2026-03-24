@@ -36,6 +36,9 @@ export const useAuth = () => {
     try {
       const data: Token = await authApi.register(email, password);
       localStorage.setItem('token', data.access_token);
+      if (data.refresh_token) {
+        localStorage.setItem('refresh_token', data.refresh_token);
+      }
       const userData = await authApi.getMe();
       setUser(userData);
       return { success: true };
@@ -52,6 +55,9 @@ export const useAuth = () => {
     try {
       const data: Token = await authApi.login(email, password);
       localStorage.setItem('token', data.access_token);
+      if (data.refresh_token) {
+        localStorage.setItem('refresh_token', data.refresh_token);
+      }
       const userData = await authApi.getMe();
       setUser(userData);
       return { success: true };

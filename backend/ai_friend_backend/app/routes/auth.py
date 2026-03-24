@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.services.auth_service import AuthService
 from app.schemas.user import UserCreate, UserResponse, Token, UserLogin
-from app.utils.security import get_current_user
+from app.utils.security import get_current_user, get_current_user_from_refresh_token
 from app.models.user import User
 
 router = APIRouter()
@@ -61,12 +61,42 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token = await auth_service.create_token(user)
+    tokens = await auth_service.create_token(user)
 
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-    }
+    return tokens
+
+
+@router.post("/refresh", response_model=Token)
+async def refresh_token(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Обновить access токен с помощью refresh токена"""
+    auth_service = AuthService(db)
+
+    # Получаем refresh токен из запроса
+    try:
+        body = await request.json()
+        refresh_token = body.get("refresh_token", "")
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Требуется JSON с полем refresh_token",
+        )
+
+    if not refresh_token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Требуется refresh_token",
+        )
+
+    # Проверяем refresh токен
+    user = await get_current_user_from_refresh_token(refresh_token, db)
+
+    # Создаём новые токены
+    tokens = await auth_service.create_token(user)
+
+    return tokens
 
 
 @router.get("/me", response_model=UserResponse)
