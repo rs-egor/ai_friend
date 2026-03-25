@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
@@ -5,9 +6,12 @@ from app.database import get_db
 from app.services.groq_service import GroqService
 from app.services.chat_service import ChatService
 from app.services.memory_service import MemoryService
+from app.services.subscription_service import SubscriptionService
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.utils.security import get_current_user
 from app.models.user import User
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -19,6 +23,23 @@ async def send_message(
     current_user: User = Depends(get_current_user),
 ):
     """Отправить сообщение AI-другу и получить ответ"""
+    
+    # Проверка лимита сообщений
+    subscription_service = SubscriptionService(db)
+    can_send, count, remaining = await subscription_service.check_message_limit(current_user)
+    
+    if not can_send:
+        logger.warning(f"User {current_user.id} exceeded message limit: {count}/{subscription_service.FREE_MESSAGES_LIMIT}")
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "message_limit_exceeded",
+                "message": f"Вы исчерпали лимит бесплатных сообщений ({count}/{subscription_service.FREE_MESSAGES_LIMIT}). Оформите подписку для продолжения.",
+                "messages_count": count,
+                "messages_limit": subscription_service.FREE_MESSAGES_LIMIT,
+                "remaining": 0
+            }
+        )
 
     chat_service = ChatService(db, GroqService())
 
@@ -29,10 +50,15 @@ async def send_message(
             user_message=request.message,
             language=request.language or "ru",
         )
+        
+        # Увеличиваем счётчик сообщений после успешного ответа
+        await subscription_service.increment_message_count(current_user)
+        
         return result
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
+        logger.error(f"Chat error: {e}")
         raise HTTPException(status_code=500, detail=f"Ошибка сервера: {str(e)}")
 
 

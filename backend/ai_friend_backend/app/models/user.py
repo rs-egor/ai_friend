@@ -12,8 +12,12 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
+    
+    # Счётчик сообщений для бесплатного тарифа
+    messages_count = Column(Integer, default=0)
 
     # Связи
     friends = relationship("Friend", back_populates="user", cascade="all, delete-orphan")
     messages = relationship("Message", back_populates="user", cascade="all, delete-orphan")
     memories = relationship("Memory", back_populates="user", cascade="all, delete-orphan")
+    subscription = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")

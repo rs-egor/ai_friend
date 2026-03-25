@@ -12,7 +12,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import engine, Base, get_db
-from app.routes import auth, chat, friends
+from app.routes import auth, chat, friends, subscription
 
 # Создание таблиц БД
 async def init_db():
@@ -100,6 +100,7 @@ app.add_middleware(CORSRegexMiddleware)
 app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
 app.include_router(friends.router, prefix="/api/friends", tags=["Friends"])
+app.include_router(subscription.router, prefix="/api/subscription", tags=["Subscription"])
 
 
 @app.on_event("startup")
