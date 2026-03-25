@@ -20,11 +20,15 @@ export const SubscriptionModal = ({ isOpen, onClose, messagesCount, messagesLimi
     setError(null);
 
     try {
-      await subscriptionApi.activate(planType);
-      onActivate?.();
-      onClose();
+      // Создаём checkout сессию
+      const response = await subscriptionApi.createCheckout(planType);
+      
+      // Перенаправляем на Stripe Checkout
+      if (response.checkout_url) {
+        window.location.href = response.checkout_url;
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка активации подписки');
+      setError(err instanceof Error ? err.message : 'Ошибка создания платежа');
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +86,7 @@ export const SubscriptionModal = ({ isOpen, onClose, messagesCount, messagesLimi
           >
             <span>Monthly</span>
             <div className="flex items-center">
-              <span className="text-lg">$9.99</span>
+              <span className="text-lg">$9.99/мес</span>
               <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -99,7 +103,7 @@ export const SubscriptionModal = ({ isOpen, onClose, messagesCount, messagesLimi
             </div>
             <span>Yearly</span>
             <div className="flex items-center">
-              <span className="text-lg">$99.99</span>
+              <span className="text-lg">$99.99/год</span>
               <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -114,9 +118,9 @@ export const SubscriptionModal = ({ isOpen, onClose, messagesCount, messagesLimi
           </div>
         )}
 
-        {/* Demo notice */}
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl text-xs text-center">
-          ℹ️ Сейчас подписка активируется бесплатно (Demo режим)
+        {/* Secure payment notice */}
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl text-xs text-center mb-4">
+          🔒 Безопасная оплата через Stripe
         </div>
 
         {/* Close button */}

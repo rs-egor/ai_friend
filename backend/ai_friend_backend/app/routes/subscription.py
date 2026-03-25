@@ -1,8 +1,9 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.services.subscription_service import SubscriptionService
+from app.services.stripe_service import StripeService
 from app.schemas.subscription import SubscriptionResponse, PaymentRequest
 from app.utils.security import get_current_user
 from app.models.user import User
@@ -32,39 +33,130 @@ async def get_subscription(
     )
 
 
-@router.post("/subscription/activate")
-async def activate_subscription(
+@router.post("/subscription/create-checkout")
+async def create_checkout_session(
     payment_request: PaymentRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     """
-    Активировать подписку.
+    Создать сессию checkout для оплаты через Stripe.
     
-    В демо-режиме просто активирует премиум.
-    В production здесь будет интеграция с платёжной системой (Stripe, CryptoCloud и т.д.)
+    Возвращает URL для перенаправления пользователя на оплату.
     """
-    logger.info(f"User {current_user.id} activating subscription: {payment_request.plan_type}")
+    logger.info(f"User {current_user.id} creating checkout session: {payment_request.plan_type}")
+    
+    try:
+        stripe_service = StripeService()
+        
+        session = await stripe_service.create_checkout_session(
+            db=db,
+            user=current_user,
+            plan_type=payment_request.plan_type,
+        )
+        
+        return {
+            "success": True,
+            "checkout_url": session["checkout_url"],
+            "session_id": session["session_id"],
+        }
+        
+    except ValueError as e:
+        logger.error(f"Checkout error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Checkout error: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка создания платежа")
+
+
+@router.post("/subscription/webhook")
+async def stripe_webhook(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Webhook для обработки событий от Stripe.
+    
+    Stripe будет отправлять POST запросы на этот endpoint при:
+    - Успешной оплате
+    - Отмене подписки
+    - Истечении срока подписки
+    """
+    payload = await request.body()
+    sig_header = request.headers.get('stripe-signature')
+    
+    try:
+        stripe_service = StripeService()
+        result = await stripe_service.handle_webhook(payload, sig_header)
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Webhook error: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка webhook")
+
+
+@router.get("/subscription/portal")
+async def create_portal_session(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Создать сессию для управления подпиской.
+    
+    Перенаправляет пользователя в Stripe Customer Portal
+    где он может отменить подписку или изменить план.
+    """
+    try:
+        stripe_service = StripeService()
+        session = await stripe_service.create_portal_session(current_user.id)
+        
+        return {
+            "success": True,
+            "portal_url": session["portal_url"],
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/subscription/success")
+async def subscription_success():
+    """Страница успешной оплаты (redirect с frontend)"""
+    return {"success": True, "message": "Подписка активирована"}
+
+
+@router.get("/subscription/cancel")
+async def subscription_cancel():
+    """Страница отмены оплаты"""
+    return {"success": False, "message": "Оплата отменена"}
+
+
+@router.post("/subscription/activate")
+async def activate_subscription(
+    payment_request: PaymentRequest = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Активировать подписку (DEMO режим).
+    
+    В production используйте /subscription/create-checkout
+    """
+    logger.info(f"User {current_user.id} activating subscription (DEMO)")
     
     subscription_service = SubscriptionService(db)
     
-    # В демо-режиме просто активируем премиум
-    # В production здесь будет:
-    # 1. Создание платежа в Stripe/CryptoCloud
-    # 2. Redirect пользователя на оплату
-    # 3. Webhook для подтверждения оплаты
-    # 4. Активация подписки после успешной оплаты
-    
+    # DEMO: просто активируем премиум
     subscription = await subscription_service.activate_premium(
         user_id=current_user.id,
-        plan_type=payment_request.plan_type,
-        payment_provider="demo",  # Замените на "stripe" или "crypto" в production
+        plan_type=payment_request.plan_type if payment_request else "monthly",
+        payment_provider="demo",
         subscription_id=f"demo_{current_user.id}"
     )
     
     return {
         "success": True,
-        "message": "Подписка активирована",
+        "message": "Подписка активирована (DEMO режим)",
         "subscription": {
             "is_premium": subscription.is_premium,
             "plan_type": subscription.plan_type,

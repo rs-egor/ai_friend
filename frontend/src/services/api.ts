@@ -184,7 +184,16 @@ export const subscriptionApi = {
     return response.data;
   },
 
+  createCheckout: async (planType: 'monthly' | 'yearly') => {
+    const response = await api.post('/subscription/create-checkout', {
+      plan_type: planType,
+      payment_method: 'card',
+    });
+    return response.data;
+  },
+
   activate: async (planType: 'monthly' | 'yearly') => {
+    // DEMO режим - для тестирования без реальной оплаты
     const response = await api.post('/subscription/activate', {
       plan_type: planType,
       payment_method: 'card',
@@ -194,6 +203,11 @@ export const subscriptionApi = {
 
   resetCounter: async () => {
     const response = await api.post('/subscription/reset-counter');
+    return response.data;
+  },
+
+  getPortal: async () => {
+    const response = await api.get('/subscription/portal');
     return response.data;
   },
 };

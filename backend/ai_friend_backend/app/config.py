@@ -27,6 +27,13 @@ class Settings(BaseSettings):
     APP_NAME: str = "AI Friend"
     DEBUG: bool = True
 
+    # Stripe
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_PUBLISHABLE_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PRICE_ID_MONTHLY: str = ""  # Price ID для monthly подписки
+    STRIPE_PRICE_ID_YEARLY: str = ""   # Price ID для yearly подписки
+
     # Порты (не используются напрямую, но могут быть в .env)
     BACKEND_PORT: int = 8000
     FRONTEND_PORT: int = 8080
