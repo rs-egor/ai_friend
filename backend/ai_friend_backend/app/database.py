@@ -10,9 +10,16 @@ if settings.DATABASE_URL.startswith("sqlite"):
         connect_args={"check_same_thread": False},
     )
 else:
+    # Для PostgreSQL используем asyncpg
+    # Если DATABASE_URL начинается с postgresql://, заменяем на postgresql+asyncpg://
+    database_url = settings.DATABASE_URL
+    if database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    
     engine = create_async_engine(
-        settings.DATABASE_URL,
+        database_url,
         echo=settings.DEBUG,
+        pool_pre_ping=True,  # Проверка подключения перед использованием
     )
 
 # Сессия для работы с БД
