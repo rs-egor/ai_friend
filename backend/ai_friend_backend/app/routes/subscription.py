@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.services.subscription_service import SubscriptionService
-from app.services.stripe_service import StripeService
+# from app.services.stripe_service import StripeService  # Stripe отключён
 from app.schemas.subscription import SubscriptionResponse, PaymentRequest
 from app.utils.security import get_current_user
 from app.models.user import User
@@ -42,31 +42,26 @@ async def create_checkout_session(
     """
     Создать сессию checkout для оплаты через Stripe.
     
-    Возвращает URL для перенаправления пользователя на оплату.
+    ⚠️ Stripe отключён - используется DEMO режим.
     """
-    logger.info(f"User {current_user.id} creating checkout session: {payment_request.plan_type}")
-    
-    try:
-        stripe_service = StripeService()
-        
-        session = await stripe_service.create_checkout_session(
-            db=db,
-            user=current_user,
-            plan_type=payment_request.plan_type,
-        )
-        
-        return {
-            "success": True,
-            "checkout_url": session["checkout_url"],
-            "session_id": session["session_id"],
-        }
-        
-    except ValueError as e:
-        logger.error(f"Checkout error: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Checkout error: {e}")
-        raise HTTPException(status_code=500, detail="Ошибка создания платежа")
+    logger.info(f"User {current_user.id} creating checkout session: {payment_request.plan_type} (DEMO)")
+
+    # Stripe отключён - используем DEMO активацию
+    subscription_service = SubscriptionService(db)
+    subscription = await subscription_service.activate_premium(
+        user_id=current_user.id,
+        plan_type=payment_request.plan_type,
+        payment_provider="demo",
+        subscription_id=f"demo_{current_user.id}"
+    )
+
+    return {
+        "success": True,
+        "checkout_url": None,
+        "session_id": None,
+        "demo_mode": True,
+        "message": "Подписка активирована в DEMO режиме"
+    }
 
 
 @router.post("/webhook")
@@ -77,23 +72,10 @@ async def stripe_webhook(
     """
     Webhook для обработки событий от Stripe.
     
-    Stripe будет отправлять POST запросы на этот endpoint при:
-    - Успешной оплате
-    - Отмене подписки
-    - Истечении срока подписки
+    ⚠️ Stripe отключён - webhook не работает.
     """
-    payload = await request.body()
-    sig_header = request.headers.get('stripe-signature')
-    
-    try:
-        stripe_service = StripeService()
-        result = await stripe_service.handle_webhook(payload, sig_header)
-        return result
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Webhook error: {e}")
-        raise HTTPException(status_code=500, detail="Ошибка webhook")
+    logger.warning("Stripe webhook вызван, но Stripe отключён")
+    return {"status": "disabled", "message": "Stripe отключён"}
 
 
 @router.get("/portal")
@@ -104,19 +86,14 @@ async def create_portal_session(
     """
     Создать сессию для управления подпиской.
     
-    Перенаправляет пользователя в Stripe Customer Portal
-    где он может отменить подписку или изменить план.
+    ⚠️ Stripe отключён - портал не работает.
     """
-    try:
-        stripe_service = StripeService()
-        session = await stripe_service.create_portal_session(current_user.id)
-        
-        return {
-            "success": True,
-            "portal_url": session["portal_url"],
-        }
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    logger.warning("Stripe portal вызван, но Stripe отключён")
+    return {
+        "success": False,
+        "portal_url": None,
+        "message": "Stripe отключён"
+    }
 
 
 @router.get("/success")
