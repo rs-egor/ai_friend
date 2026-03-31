@@ -12,6 +12,8 @@ import Register from "./pages/Register.tsx";
 import Friends from "./pages/Friends.tsx";
 import Chat from "./pages/Chat.tsx";
 import CreateFriend from "./pages/CreateFriend.tsx";
+import SubscriptionSuccess from "./pages/SubscriptionSuccess.tsx";
+import SubscriptionCancel from "./pages/SubscriptionCancel.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -52,6 +54,8 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+              <Route path="/subscription/success" element={<SubscriptionSuccess />} />
+              <Route path="/subscription/cancel" element={<SubscriptionCancel />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

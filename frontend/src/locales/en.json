@@ -159,6 +159,20 @@
     "message": "Oops! Page not found",
     "back_link": "Return to Home"
   },
+  "subscription": {
+    "success": {
+      "title": "Payment Successful!",
+      "description": "Your subscription has been activated. You now have full access to all features.",
+      "go_to_chat": "Go to Chat"
+    },
+    "cancel": {
+      "title": "Payment Cancelled",
+      "description": "You have cancelled the payment process. Your subscription was not activated.",
+      "help": "If you experienced issues, please try again or contact support.",
+      "go_home": "Go Home",
+      "try_again": "Try Again"
+    }
+  },
   "landing": {
     "early_access": "Early Access",
     "hero_title": "Your AI friend — created by you, right now",
