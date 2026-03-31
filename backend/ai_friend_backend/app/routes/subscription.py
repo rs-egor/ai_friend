@@ -121,16 +121,45 @@ async def subscription_success(
         try:
             import stripe
             stripe.api_key = settings.STRIPE_SECRET_KEY
+
+            # Проверяем, не обрабатывали ли уже эту сессию
+            from app.models.subscription import Subscription
+            from sqlalchemy import select
             
+            result = await db.execute(
+                select(Subscription).where(
+                    Subscription.user_id == current_user.id,
+                    Subscription.subscription_id.like(f"%{session_id}%")
+                )
+            )
+            existing_sub = result.scalar_one_or_none()
+            
+            if existing_sub and existing_sub.is_premium:
+                logger.info(f"Session {session_id} already processed for user {current_user.id}")
+                return {"success": True, "message": "Подписка уже активирована"}
+
             session = stripe.checkout.Session.retrieve(session_id)
-            
+
             logger.info(f"Session {session_id}: payment_status={session.payment_status}, subscription={session.subscription}")
-            
+
             if session.payment_status == "paid":
+                # Проверяем, есть ли уже активная подписка
+                result = await db.execute(
+                    select(Subscription).where(Subscription.user_id == current_user.id)
+                )
+                existing_subscription = result.scalar_one_or_none()
+                
+                if existing_subscription and existing_subscription.is_premium:
+                    # Проверяем не истёк ли срок
+                    from datetime import datetime
+                    if existing_subscription.expires_at and existing_subscription.expires_at > datetime.utcnow():
+                        logger.info(f"User {current_user.id} already has active premium subscription")
+                        return {"success": True, "message": "Подписка уже активна"}
+
                 # Активируем подписку
                 from app.services.subscription_service import SubscriptionService
                 subscription_service = SubscriptionService(db)
-                
+
                 plan_type = "monthly"
                 if session.mode == "subscription" and session.subscription:
                     # Получаем информацию о подписке для определения плана
@@ -141,21 +170,21 @@ async def subscription_success(
                         price_id = items[0].get('price', {}).get('id', '')
                         if price_id == settings.STRIPE_PRICE_ID_YEARLY:
                             plan_type = "yearly"
-                
+
                 await subscription_service.activate_premium(
                     user_id=current_user.id,
                     plan_type=plan_type,
                     payment_provider="stripe",
                     subscription_id=session.subscription if session.subscription else session_id
                 )
-                
+
                 logger.info(f"Activated premium for user {current_user.id} via session {session_id}")
                 return {"success": True, "message": "Подписка активирована"}
         except Exception as e:
             logger.error(f"Error verifying session: {e}")
             import traceback
             logger.error(traceback.format_exc())
-    
+
     return {"success": True, "message": "Подписка активирована"}
 
 
