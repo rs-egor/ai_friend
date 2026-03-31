@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -8,16 +8,25 @@ import { CheckCircle } from "lucide-react";
 const SubscriptionSuccess = () => {
   const navigate = useNavigate();
   const { t } = useLang();
-  const [sessionId, setSessionId] = useState<string>("");
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const session_id = params.get("session_id");
-    if (session_id) {
-      setSessionId(session_id);
-      // Можно отправить запрос на бэкенд для подтверждения
-      // fetch(`/api/subscription/verify?session_id=${session_id}`)
-    }
+    // Проверяем подписку после успешной оплаты
+    const checkSubscription = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          await fetch("/api/subscription/", {
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error checking subscription:", error);
+      }
+    };
+    
+    checkSubscription();
   }, []);
 
   return (
@@ -31,11 +40,6 @@ const SubscriptionSuccess = () => {
           <CardDescription>{t("subscription.success.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-center text-sm text-muted-foreground">
-            {sessionId && (
-              <p>Session ID: {sessionId.slice(0, 20)}...</p>
-            )}
-          </div>
           <div className="flex gap-2">
             <Button className="w-full" onClick={() => navigate("/chat")}>
               {t("subscription.success.go_to_chat")}
