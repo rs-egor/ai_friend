@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { XCircle } from "lucide-react";
 
 const SubscriptionCancel = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useLang();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">

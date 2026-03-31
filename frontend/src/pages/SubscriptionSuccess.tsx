@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 
 const SubscriptionSuccess = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useLang();
   const [sessionId, setSessionId] = useState<string>("");
 
   useEffect(() => {
