@@ -7,6 +7,7 @@ from app.services.stripe_service import StripeService
 from app.schemas.subscription import SubscriptionResponse, PaymentRequest
 from app.utils.security import get_current_user
 from app.models.user import User
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -123,19 +124,36 @@ async def subscription_success(
             
             session = stripe.checkout.Session.retrieve(session_id)
             
+            logger.info(f"Session {session_id}: payment_status={session.payment_status}, subscription={session.subscription}")
+            
             if session.payment_status == "paid":
                 # Активируем подписку
+                from app.services.subscription_service import SubscriptionService
                 subscription_service = SubscriptionService(db)
+                
+                plan_type = "monthly"
+                if session.mode == "subscription" and session.subscription:
+                    # Получаем информацию о подписке для определения плана
+                    stripe_sub = stripe.Subscription.retrieve(session.subscription)
+                    # Проверяем, какой план (monthly/yearly) по price
+                    if stripe_sub.items and stripe_sub.items.data:
+                        price = stripe_sub.items.data[0].price
+                        if price.id == settings.STRIPE_PRICE_ID_YEARLY:
+                            plan_type = "yearly"
+                
                 await subscription_service.activate_premium(
                     user_id=current_user.id,
-                    plan_type="monthly",
+                    plan_type=plan_type,
                     payment_provider="stripe",
                     subscription_id=session.subscription if session.subscription else session_id
                 )
                 
+                logger.info(f"Activated premium for user {current_user.id} via session {session_id}")
                 return {"success": True, "message": "Подписка активирована"}
         except Exception as e:
             logger.error(f"Error verifying session: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
     
     return {"success": True, "message": "Подписка активирована"}
 
