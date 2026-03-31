@@ -13,9 +13,13 @@ const SubscriptionSuccess = () => {
     // Проверяем подписку после успешной оплаты
     const checkSubscription = async () => {
       try {
+        const params = new URLSearchParams(window.location.search);
+        const session_id = params.get("session_id");
         const token = localStorage.getItem("token");
-        if (token) {
-          await fetch("/api/subscription/", {
+        
+        if (token && session_id) {
+          // Отправляем запрос на верификацию сессии
+          await fetch(`/api/subscription/success?session_id=${session_id}`, {
             headers: {
               "Authorization": `Bearer ${token}`
             }

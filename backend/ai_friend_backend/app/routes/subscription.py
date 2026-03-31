@@ -107,8 +107,36 @@ async def create_portal_session(
 
 
 @router.get("/success")
-async def subscription_success():
-    """Страница успешной оплаты (redirect с frontend)"""
+async def subscription_success(
+    session_id: str = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Страница успешной оплаты (redirect с frontend).
+    Активирует подписку по session_id.
+    """
+    if session_id:
+        try:
+            import stripe
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            
+            session = stripe.checkout.Session.retrieve(session_id)
+            
+            if session.payment_status == "paid":
+                # Активируем подписку
+                subscription_service = SubscriptionService(db)
+                await subscription_service.activate_premium(
+                    user_id=current_user.id,
+                    plan_type="monthly",
+                    payment_provider="stripe",
+                    subscription_id=session.subscription if session.subscription else session_id
+                )
+                
+                return {"success": True, "message": "Подписка активирована"}
+        except Exception as e:
+            logger.error(f"Error verifying session: {e}")
+    
     return {"success": True, "message": "Подписка активирована"}
 
 
