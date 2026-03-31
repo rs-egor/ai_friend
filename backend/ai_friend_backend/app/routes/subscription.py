@@ -136,9 +136,10 @@ async def subscription_success(
                     # Получаем информацию о подписке для определения плана
                     stripe_sub = stripe.Subscription.retrieve(session.subscription)
                     # Проверяем, какой план (monthly/yearly) по price
-                    if stripe_sub.items and stripe_sub.items.data:
-                        price = stripe_sub.items.data[0].price
-                        if price.id == settings.STRIPE_PRICE_ID_YEARLY:
+                    items = stripe_sub.get('items', {}).get('data', [])
+                    if items:
+                        price_id = items[0].get('price', {}).get('id', '')
+                        if price_id == settings.STRIPE_PRICE_ID_YEARLY:
                             plan_type = "yearly"
                 
                 await subscription_service.activate_premium(
