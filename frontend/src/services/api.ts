@@ -203,7 +203,7 @@ export const chatApi = {
 // Subscription API
 export const subscriptionApi = {
   get: async () => {
-    const response = await api.get('/subscription');
+    const response = await api.get('/subscription/');
     return response.data;
   },
 
