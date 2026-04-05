@@ -52,7 +52,8 @@
     "theme_light": "Light",
     "theme_dark": "Dark",
     "theme_system": "System",
-    "language": "Language"
+    "language": "Language",
+    "account": "Account"
   },
   "friends": {
     "page_title": "My Friends",
@@ -290,5 +291,79 @@
     "final_cta_input_email": "Email",
     "final_cta_button": "Get 3 days free",
     "final_cta_disclaimer": "First 500 participants — 3 days free + special bonus with annual subscription"
+  },
+  "account": {
+    "overview": "Overview",
+    "profile": "Profile",
+    "subscription": "Subscription",
+    "friends": "Friends",
+    "settings": "Settings",
+    "back_to_app": "Back to app",
+    "logout": "Log out",
+    "quick_actions": "Quick actions",
+    "create_friend": "Create a friend",
+    "open_chat": "Open chat",
+    "subscribe": "Subscribe",
+    "manage_subscription": "Manage subscription",
+    "expires_at": "Expires",
+    "total_friends": "Total friends",
+    "total_messages": "Total messages",
+    "messages_remaining": "Messages remaining",
+    "messages_used": "Messages used",
+    "remaining": "remaining"
+  },
+  "profile": {
+    "email": "Email",
+    "email_description": "Change your account email",
+    "email_updated": "Email updated successfully",
+    "email_error": "Error updating email",
+    "change_password": "Change password",
+    "password_description": "Enter current and new password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "password_updated": "Password changed successfully",
+    "password_error": "Error changing password",
+    "password_too_short": "Password must be at least 6 characters",
+    "registration_date": "Registration date",
+    "delete_account": "Delete account",
+    "delete_description": "This action will permanently delete your account and all associated data",
+    "delete_confirm_title": "Are you sure?",
+    "delete_confirm_description": "All your data, friends and messages will be permanently deleted.",
+    "delete_error": "Error deleting account"
+  },
+  "settings": {
+    "language": "Language",
+    "language_description": "Choose interface language"
+  },
+  "friends": {
+    "create": "Create a friend",
+    "create_first": "Create your first friend",
+    "no_friends": "You don't have any friends yet",
+    "open_chat": "Open chat",
+    "delete": "Delete",
+    "delete_error": "Error deleting friend",
+    "deleted": "Friend deleted",
+    "delete_confirm_title": "Delete friend?",
+    "delete_confirm_description": "All messages and memories with this friend will be deleted.",
+    "created_at": "Created"
+  },
+  "scenarios": {
+    "casual": "Casual",
+    "professional": "Professional",
+    "emotional": "Emotional",
+    "education": "Education",
+    "mentorship": "Mentorship",
+    "creative": "Creative"
+  },
+  "subscription": {
+    "free": "Free",
+    "free_description": "Free plan with message limit",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "premium": "Premium",
+    "status": "Subscription status",
+    "subscribe_monthly": "Subscribe monthly",
+    "subscribe_yearly": "Subscribe yearly",
+    "error": "Error subscribing"
   }
 }

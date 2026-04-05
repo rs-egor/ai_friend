@@ -6,6 +6,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AccountLayout } from "@/components/account/AccountLayout";
+import { AccountOverview } from "@/pages/AccountOverview";
+import { AccountProfile } from "@/pages/AccountProfile";
+import { AccountSubscription } from "@/pages/AccountSubscription";
+import { AccountFriends } from "@/pages/AccountFriends";
+import { AccountSettings } from "@/pages/AccountSettings";
 import Index from "./pages/Index.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
@@ -56,6 +62,23 @@ const App = () => (
               />
               <Route path="/subscription/success" element={<SubscriptionSuccess />} />
               <Route path="/subscription/cancel" element={<SubscriptionCancel />} />
+
+              {/* Account routes */}
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <AccountLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<AccountOverview />} />
+                <Route path="profile" element={<AccountProfile />} />
+                <Route path="subscription" element={<AccountSubscription />} />
+                <Route path="friends" element={<AccountFriends />} />
+                <Route path="settings" element={<AccountSettings />} />
+              </Route>
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -92,6 +92,29 @@ export const authApi = {
     const response = await api.get('/auth/me');
     return response.data;
   },
+
+  updateProfile: async (email: string) => {
+    const response = await api.put('/auth/profile', { email });
+    return response.data;
+  },
+
+  changePassword: async (currentPassword: string, newPassword: string) => {
+    const response = await api.post('/auth/change-password', {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+    return response.data;
+  },
+
+  deleteAccount: async () => {
+    const response = await api.delete('/auth/account');
+    return response.data;
+  },
+
+  getStats: async () => {
+    const response = await api.get('/auth/stats');
+    return response.data;
+  },
 };
 
 // Friends API

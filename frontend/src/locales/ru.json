@@ -52,7 +52,8 @@
     "theme_light": "Светлая",
     "theme_dark": "Тёмная",
     "theme_system": "Системная",
-    "language": "Язык"
+    "language": "Язык",
+    "account": "Кабинет"
   },
   "friends": {
     "page_title": "Мои друзья",
@@ -290,5 +291,79 @@
     "final_cta_input_email": "Email",
     "final_cta_button": "Получить 3 дня бесплатно",
     "final_cta_disclaimer": "Первые 500 участников — 3 дня бесплатно + специальный бонус при годовой подписке"
+  },
+  "account": {
+    "overview": "Обзор",
+    "profile": "Профиль",
+    "subscription": "Подписка",
+    "friends": "Друзья",
+    "settings": "Настройки",
+    "back_to_app": "Назад в приложение",
+    "logout": "Выйти",
+    "quick_actions": "Быстрые действия",
+    "create_friend": "Создать друга",
+    "open_chat": "Открыть чат",
+    "subscribe": "Оформить подписку",
+    "manage_subscription": "Управление подпиской",
+    "expires_at": "Действует до",
+    "total_friends": "Всего друзей",
+    "total_messages": "Всего сообщений",
+    "messages_remaining": "Осталось сообщений",
+    "messages_used": "Использовано сообщений",
+    "remaining": "осталось"
+  },
+  "profile": {
+    "email": "Email",
+    "email_description": "Измените email вашего аккаунта",
+    "email_updated": "Email успешно обновлён",
+    "email_error": "Ошибка при обновлении email",
+    "change_password": "Сменить пароль",
+    "password_description": "Введите текущий и новый пароль",
+    "current_password": "Текущий пароль",
+    "new_password": "Новый пароль",
+    "password_updated": "Пароль успешно изменён",
+    "password_error": "Ошибка при смене пароля",
+    "password_too_short": "Пароль должен быть не менее 6 символов",
+    "registration_date": "Дата регистрации",
+    "delete_account": "Удалить аккаунт",
+    "delete_description": "Это действие необратимо удалит ваш аккаунт и все связанные данные",
+    "delete_confirm_title": "Вы уверены?",
+    "delete_confirm_description": "Все ваши данные, друзья и сообщения будут удалены безвозвратно.",
+    "delete_error": "Ошибка при удалении аккаунта"
+  },
+  "settings": {
+    "language": "Язык",
+    "language_description": "Выберите язык интерфейса"
+  },
+  "friends": {
+    "create": "Создать друга",
+    "create_first": "Создать первого друга",
+    "no_friends": "У вас пока нет друзей",
+    "open_chat": "Открыть чат",
+    "delete": "Удалить",
+    "delete_error": "Ошибка при удалении друга",
+    "deleted": "Друг удалён",
+    "delete_confirm_title": "Удалить друга?",
+    "delete_confirm_description": "Все сообщения и воспоминания с этим другом будут удалены.",
+    "created_at": "Создан"
+  },
+  "scenarios": {
+    "casual": "Повседневный",
+    "professional": "Деловой",
+    "emotional": "Душевный",
+    "education": "Обучение",
+    "mentorship": "Наставничество",
+    "creative": "Творчество"
+  },
+  "subscription": {
+    "free": "Бесплатный",
+    "free_description": "Бесплатный тариф с ограничением сообщений",
+    "monthly": "Месячный",
+    "yearly": "Годовой",
+    "premium": "Премиум",
+    "status": "Статус подписки",
+    "subscribe_monthly": "Оформить месячную",
+    "subscribe_yearly": "Оформить годовую",
+    "error": "Ошибка при оформлении подписки"
   }
 }

@@ -13,7 +13,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Moon, Sun, Monitor, Languages } from "lucide-react";
+import { LogOut, User, Moon, Sun, Monitor, Languages, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -107,6 +107,10 @@ export const UserMenu = () => {
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate("/account")}>
+          <Settings className="mr-2 h-4 w-4" />
+          {t("user_menu.account")}
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout} className="text-red-600">
           <LogOut className="mr-2 h-4 w-4" />
           {t("auth.logout.button")}

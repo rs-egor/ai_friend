@@ -58,3 +58,26 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+
+class UpdateProfileRequest(BaseModel):
+    email: EmailStr
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str = Field(..., min_length=6)
+    new_password: str = Field(..., min_length=6, max_length=72)
+
+    @field_validator('new_password')
+    @classmethod
+    def truncate_new_password(cls, v):
+        if v:
+            return v.encode('utf-8')[:72].decode('utf-8', errors='ignore')
+        return v
+
+
+class AccountStats(BaseModel):
+    total_friends: int
+    total_messages: int
+    subscription_plan: str
+    messages_remaining: int
