@@ -144,11 +144,12 @@ class StripeService:
                 subscription.payment_provider = "stripe"
                 
                 # Устанавливаем дату окончания
-                from datetime import datetime, timezone, timedelta
+                from app.utils.datetime import utcnow, utcnow_plus
                 if subscription_data['current_period_end']:
-                    subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'], tz=timezone.utc)
+                    from datetime import datetime, timezone
+                    subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'], tz=timezone.utc).replace(tzinfo=None)
                 else:
-                    subscription.expires_at = datetime.now(timezone.utc) + timedelta(days=30)
+                    subscription.expires_at = utcnow_plus(days=30)
                 
                 await db.flush()
                 logger.info(f"Activated premium for user {user_id} via Stripe")
@@ -171,7 +172,7 @@ class StripeService:
                 if subscription_data['status'] == 'active':
                     subscription.is_premium = True
                     if subscription_data['current_period_end']:
-                        subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'], tz=timezone.utc)
+                        subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'], tz=timezone.utc).replace(tzinfo=None)
                 # Если отменена
                 elif subscription_data['status'] == 'canceled':
                     subscription.is_premium = False

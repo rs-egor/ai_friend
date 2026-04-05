@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime, timezone
 from app.database import Base
+from app.utils.datetime import utcnow
 
 
 class Subscription(Base):
@@ -18,7 +18,7 @@ class Subscription(Base):
     plan_type = Column(String, default="monthly")  # "monthly" или "yearly"
 
     # Даты
-    started_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    started_at = Column(DateTime, default=utcnow)
     expires_at = Column(DateTime, nullable=True)  # Дата окончания подписки
     
     # Платёжная информация

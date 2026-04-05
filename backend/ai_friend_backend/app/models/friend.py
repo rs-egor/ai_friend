@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
-from datetime import datetime, timezone
 from app.database import Base
+from app.utils.datetime import utcnow
 
 
 class Friend(Base):
@@ -16,7 +16,7 @@ class Friend(Base):
     interests = Column(JSON, default=list)  # Интересы (список)
     scenario = Column(String, default="casual")  # Сценарий общения
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utcnow)
 
     # Связи
     user = relationship("User", back_populates="friends")

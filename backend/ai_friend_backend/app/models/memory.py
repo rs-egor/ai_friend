@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
-from datetime import datetime, timezone
 from app.database import Base
+from app.utils.datetime import utcnow
 
 
 class Memory(Base):
@@ -14,8 +14,8 @@ class Memory(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     friend_id = Column(Integer, ForeignKey("friends.id"), nullable=False)
     importance = Column(Integer, default=1)  # Важность от 1 до 5
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    last_accessed_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utcnow, index=True)
+    last_accessed_at = Column(DateTime, default=utcnow)
     access_count = Column(Integer, default=0)  # Сколько раз вспоминали
 
     # Связи
