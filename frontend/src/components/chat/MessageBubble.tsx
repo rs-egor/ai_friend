@@ -6,11 +6,25 @@ interface MessageBubbleProps {
   message: Message;
 }
 
+/**
+ * Парсит дату из строки API.
+ * Бэкенд отдаёт naive UTC datetime без "Z", поэтому добавляем его вручную,
+ * чтобы браузер корректно конвертировал в локальный часовой пояс.
+ */
+function parseUtcDate(dateStr: string): Date {
+  const normalized = dateStr.endsWith('Z') || dateStr.includes('+') || dateStr.includes('-', 10)
+    ? dateStr
+    : `${dateStr}Z`;
+  return new Date(normalized);
+}
+
 export const MessageBubble = ({ message }: MessageBubbleProps) => {
   const { lang } = useLang();
   const isUser = message.role === 'user';
 
   const timeLocale = lang === 'ru' ? 'ru-RU' : 'en-US';
+
+  const localDate = parseUtcDate(message.created_at);
 
   return (
     <div
@@ -34,7 +48,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
             isUser ? "text-primary-foreground/70" : "text-muted-foreground"
           )}
         >
-          {new Date(message.created_at).toLocaleTimeString(timeLocale, {
+          {localDate.toLocaleTimeString(timeLocale, {
             hour: '2-digit',
             minute: '2-digit',
           })}
