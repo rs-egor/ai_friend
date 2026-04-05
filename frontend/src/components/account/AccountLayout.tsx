@@ -38,7 +38,7 @@ export const AccountLayout = () => {
         <div className="mb-6">
           <Button
             variant="ghost"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/friends")}
             className="gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
