@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.subscription import Subscription
 from app.models.user import User
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class SubscriptionService:
         subscription = await self.get_subscription(user.id)
         if subscription and subscription.is_premium:
             # Проверяем не истёк ли срок
-            if subscription.expires_at and subscription.expires_at < datetime.utcnow():
+            if subscription.expires_at and subscription.expires_at < datetime.now(timezone.utc):
                 subscription.is_premium = False
                 await self.db.flush()
             else:
@@ -83,13 +83,13 @@ class SubscriptionService:
         subscription.plan_type = plan_type
         subscription.payment_provider = payment_provider
         subscription.subscription_id = subscription_id
-        subscription.started_at = datetime.utcnow()
-        
+        subscription.started_at = datetime.now(timezone.utc)
+
         # Устанавливаем дату окончания
         if plan_type == "yearly":
-            subscription.expires_at = datetime.utcnow() + timedelta(days=365)
+            subscription.expires_at = datetime.now(timezone.utc) + timedelta(days=365)
         else:  # monthly
-            subscription.expires_at = datetime.utcnow() + timedelta(days=30)
+            subscription.expires_at = datetime.now(timezone.utc) + timedelta(days=30)
         
         await self.db.flush()
         await self.db.refresh(subscription)

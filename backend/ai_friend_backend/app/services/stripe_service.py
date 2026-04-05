@@ -144,11 +144,11 @@ class StripeService:
                 subscription.payment_provider = "stripe"
                 
                 # Устанавливаем дату окончания
-                from datetime import datetime, timedelta
+                from datetime import datetime, timezone, timedelta
                 if subscription_data['current_period_end']:
-                    subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'])
+                    subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'], tz=timezone.utc)
                 else:
-                    subscription.expires_at = datetime.utcnow() + timedelta(days=30)
+                    subscription.expires_at = datetime.now(timezone.utc) + timedelta(days=30)
                 
                 await db.flush()
                 logger.info(f"Activated premium for user {user_id} via Stripe")

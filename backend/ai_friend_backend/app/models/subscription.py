@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from app.database import Base
 
 
@@ -10,15 +10,15 @@ class Subscription(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True)
-    
+
     # Статус подписки
     is_premium = Column(Boolean, default=False)
-    
+
     # Тип подписки (месяц/год)
     plan_type = Column(String, default="monthly")  # "monthly" или "yearly"
-    
+
     # Даты
-    started_at = Column(DateTime, default=datetime.utcnow)
+    started_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     expires_at = Column(DateTime, nullable=True)  # Дата окончания подписки
     
     # Платёжная информация

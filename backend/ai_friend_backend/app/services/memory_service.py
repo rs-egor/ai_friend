@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc
 from sqlalchemy.orm import joinedload
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from app.models.memory import Memory
 from app.models.user import User
 from app.models.friend import Friend
@@ -105,7 +105,7 @@ class MemoryService:
         for memory, score in scored[:limit]:
             if score > 0:
                 memory.access_count += 1
-                memory.last_accessed_at = datetime.utcnow()
+                memory.last_accessed_at = datetime.now(timezone.utc)
 
         return [m for m, score in scored[:limit] if score > 0][:limit]
 
@@ -169,7 +169,7 @@ class MemoryService:
 
         if memory:
             memory.access_count += 1
-            memory.last_accessed_at = datetime.utcnow()
+            memory.last_accessed_at = datetime.now(timezone.utc)
             await self.db.flush()
 
     async def delete_memory(self, user_id: int, memory_id: int) -> bool:
