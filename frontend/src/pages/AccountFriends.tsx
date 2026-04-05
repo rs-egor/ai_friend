@@ -37,7 +37,8 @@ export const AccountFriends = () => {
   const loadFriends = async () => {
     try {
       const data = await friendsApi.list();
-      setFriends(data.friends || []);
+      // Бэкенд возвращает массив напрямую
+      setFriends(Array.isArray(data) ? data : (data.friends || []));
     } catch (e) {
       console.error("Failed to load friends:", e);
     } finally {
