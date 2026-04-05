@@ -4,6 +4,7 @@ import { useChat } from "@/hooks/useChat";
 import { useFriends } from "@/hooks/useChat";
 import { useLang } from "@/contexts/LanguageContext";
 import { UserMenu } from "@/components/UserMenu";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { MessageInput } from "@/components/chat/MessageInput";
 import { MemoryPanel } from "@/components/chat/MemoryPanel";
@@ -163,6 +164,7 @@ const Chat = () => {
                   <Brain className="h-4 w-4 mr-2" />
                   {t("chat.memory_button")}
                 </Button>
+                <LanguageSwitcher />
                 <UserMenu />
               </div>
             </div>

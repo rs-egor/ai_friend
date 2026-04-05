@@ -64,7 +64,17 @@
     "delete_confirm": "Вы уверены, что хотите удалить \"{name}\"?",
     "delete_success": "Друг \"{name}\" удалён",
     "delete_error": "Не удалось удалить друга",
-    "chat_button": "Чат"
+    "chat_button": "Чат",
+    "create": "Создать друга",
+    "create_first": "Создать первого друга",
+    "no_friends": "У вас пока нет друзей",
+    "open_chat": "Открыть чат",
+    "delete": "Удалить",
+    "delete_error": "Ошибка при удалении друга",
+    "deleted": "Друг удалён",
+    "delete_confirm_title": "Удалить друга?",
+    "delete_confirm_description": "Все сообщения и воспоминания с этим другом будут удалены.",
+    "created_at": "Создан"
   },
   "create_friend": {
     "page_title": "Создание AI-друга",
@@ -334,18 +344,6 @@
   "settings": {
     "language": "Язык",
     "language_description": "Выберите язык интерфейса"
-  },
-  "friends": {
-    "create": "Создать друга",
-    "create_first": "Создать первого друга",
-    "no_friends": "У вас пока нет друзей",
-    "open_chat": "Открыть чат",
-    "delete": "Удалить",
-    "delete_error": "Ошибка при удалении друга",
-    "deleted": "Друг удалён",
-    "delete_confirm_title": "Удалить друга?",
-    "delete_confirm_description": "Все сообщения и воспоминания с этим другом будут удалены.",
-    "created_at": "Создан"
   },
   "scenarios": {
     "casual": "Повседневный",

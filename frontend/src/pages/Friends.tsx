@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useFriends } from "@/hooks/useChat";
 import { useLang } from "@/contexts/LanguageContext";
 import { UserMenu } from "@/components/UserMenu";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -42,7 +43,8 @@ const Friends = () => {
               {t("friends.page_description")}
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             <UserMenu />
             <Button onClick={() => navigate("/create-friend")}>
               <Plus className="mr-2 h-4 w-4" />

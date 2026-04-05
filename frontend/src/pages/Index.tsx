@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLang } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/UserMenu";
-import LanguageSwitcher from "@/components/landing/LanguageSwitcher";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import HeroSection from "@/components/landing/HeroSection";
 import ProblemSection from "@/components/landing/ProblemSection";
 import ForWhomSection from "@/components/landing/ForWhomSection";
@@ -31,7 +31,8 @@ const Index = () => {
 
   return (
     <div>
-      <div className="fixed top-4 right-4 z-50 flex gap-2">
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <LanguageSwitcher />
         {isLoading ? null : isAuthenticated ? (
           <UserMenu />
         ) : (
@@ -40,7 +41,6 @@ const Index = () => {
           </Button>
         )}
       </div>
-      <LanguageSwitcher />
       <main className="overflow-x-hidden">
         <HeroSection onGetStarted={handleStartChat} />
         <ProblemSection />

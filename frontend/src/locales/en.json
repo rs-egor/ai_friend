@@ -64,7 +64,17 @@
     "delete_confirm": "Are you sure you want to delete \"{name}\"?",
     "delete_success": "Friend \"{name}\" deleted",
     "delete_error": "Failed to delete friend",
-    "chat_button": "Chat"
+    "chat_button": "Chat",
+    "create": "Create a friend",
+    "create_first": "Create your first friend",
+    "no_friends": "You don't have any friends yet",
+    "open_chat": "Open chat",
+    "delete": "Delete",
+    "delete_error": "Error deleting friend",
+    "deleted": "Friend deleted",
+    "delete_confirm_title": "Delete friend?",
+    "delete_confirm_description": "All messages and memories with this friend will be deleted.",
+    "created_at": "Created"
   },
   "create_friend": {
     "page_title": "Create AI Friend",
@@ -334,18 +344,6 @@
   "settings": {
     "language": "Language",
     "language_description": "Choose interface language"
-  },
-  "friends": {
-    "create": "Create a friend",
-    "create_first": "Create your first friend",
-    "no_friends": "You don't have any friends yet",
-    "open_chat": "Open chat",
-    "delete": "Delete",
-    "delete_error": "Error deleting friend",
-    "deleted": "Friend deleted",
-    "delete_confirm_title": "Delete friend?",
-    "delete_confirm_description": "All messages and memories with this friend will be deleted.",
-    "created_at": "Created"
   },
   "scenarios": {
     "casual": "Casual",
