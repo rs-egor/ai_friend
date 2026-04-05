@@ -23,7 +23,7 @@ class ChatService:
         user: User,
         friend_id: int,
         user_message: str,
-        language: str = "ru",
+        language: str = "en",
     ) -> dict:
         """Отправить сообщение и получить ответ от AI с учётом памяти"""
 

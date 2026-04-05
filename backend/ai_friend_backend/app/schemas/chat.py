@@ -29,7 +29,7 @@ class MessageResponse(MessageBase):
 class ChatRequest(BaseModel):
     message: str
     friend_id: int
-    language: Optional[str] = "ru"
+    language: Optional[str] = "en"
 
 
 class ChatResponse(BaseModel):

@@ -1,12 +1,16 @@
 import { cn } from "@/lib/utils";
 import { Message } from "@/types";
+import { useLang } from "@/contexts/LanguageContext";
 
 interface MessageBubbleProps {
   message: Message;
 }
 
 export const MessageBubble = ({ message }: MessageBubbleProps) => {
+  const { lang } = useLang();
   const isUser = message.role === 'user';
+
+  const timeLocale = lang === 'ru' ? 'ru-RU' : 'en-US';
 
   return (
     <div
@@ -30,7 +34,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
             isUser ? "text-primary-foreground/70" : "text-muted-foreground"
           )}
         >
-          {new Date(message.created_at).toLocaleTimeString('ru-RU', {
+          {new Date(message.created_at).toLocaleTimeString(timeLocale, {
             hour: '2-digit',
             minute: '2-digit',
           })}

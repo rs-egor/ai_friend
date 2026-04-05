@@ -145,7 +145,7 @@ export const chatApi = {
       const response = await api.post('/chat/send', {
         message,
         friend_id: friendId,
-        language: language || 'ru',
+        language: language || 'en',
       });
       return response.data;
     } catch (error: any) {

@@ -162,22 +162,28 @@ IMPORTANT: Communicate in English. Respond in the same language the user writes 
 }
 
 
-def build_system_prompt(personality: str, gender: str, age: str, interests: list, scenario: str, language: str = "ru") -> str:
+def build_system_prompt(personality: str, gender: str, age: str, interests: list, scenario: str, language: str = "en", friend_name: str = None) -> str:
     """
     Сборка системного промпта из выбранных компонентов.
-    
+
     Args:
         personality: ID личности (friend, assistant, mentor, etc.)
         gender: ID пола (male, female, neutral)
         age: ID возраста (teen, young, adult, mature)
         interests: Список ID интересов (tech, science, art, etc.)
         scenario: ID сценария (casual, professional, emotional, etc.)
-    
+        language: Язык общения (ru, en)
+        friend_name: Имя друга
+
     Returns:
         Полный системный промпт.
     """
     parts = []
-    
+
+    # Имя друга (если указано)
+    if friend_name:
+        parts.append(f"Твоё имя — {friend_name}. Это важная часть твоей личности, обращайся к себе по имени если уместно.")
+
     # Основа личности
     if personality in PERSONALITIES:
         parts.append(PERSONALITIES[personality]["prompt"])
@@ -203,7 +209,7 @@ def build_system_prompt(personality: str, gender: str, age: str, interests: list
     parts.append(COMMON_INSTRUCTIONS)
     
     # Инструкция по языку
-    language_instruction = LANGUAGE_INSTRUCTIONS.get(language, LANGUAGE_INSTRUCTIONS["ru"])
+    language_instruction = LANGUAGE_INSTRUCTIONS.get(language, LANGUAGE_INSTRUCTIONS["en"])
     parts.append(language_instruction)
 
     return "\n\n".join(parts)
