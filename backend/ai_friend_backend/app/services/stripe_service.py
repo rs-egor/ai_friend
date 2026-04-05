@@ -199,24 +199,33 @@ class StripeService:
     async def create_portal_session(self, user_id: int) -> dict:
         """Создать сессию для управления подпиской в Stripe Customer Portal"""
         from app.database import async_session_maker
-        
+
         async with async_session_maker() as db:
             result = await db.execute(
                 select(Subscription).where(Subscription.user_id == user_id)
             )
             subscription = result.scalar_one_or_none()
-            
+
             if not subscription or not subscription.subscription_id:
                 raise ValueError("Подписка не найдена")
-            
+
+            # Демо-подписки не поддерживают Stripe Portal
+            if subscription.subscription_id.startswith("demo_"):
+                raise ValueError("Управление демо-подпиской недоступно. Оформите реальную подписку через Stripe.")
+
             # Получаем customer_id из Stripe
-            stripe_subscription = stripe.Subscription.retrieve(subscription.subscription_id)
+            try:
+                stripe_subscription = stripe.Subscription.retrieve(subscription.subscription_id)
+            except stripe.error.InvalidRequestError as e:
+                logger.error(f"Stripe error retrieving subscription {subscription.subscription_id}: {e}")
+                raise ValueError(f"Ошибка Stripe: {str(e)}")
+
             customer_id = stripe_subscription.customer
-            
+
             # Создаём сессию портала
             portal_session = stripe.billing_portal.Session.create(
                 customer=customer_id,
                 return_url=f"{settings.FRONTEND_URL}/subscription",
             )
-            
+
             return {"portal_url": portal_session.url}
