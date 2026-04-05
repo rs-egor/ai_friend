@@ -80,7 +80,7 @@ export const AccountOverview = () => {
               <p className="text-sm text-muted-foreground">
                 {t("account.messages_remaining")}: {subscription?.remaining_messages ?? 0} / {subscription?.messages_limit ?? 5}
               </p>
-              <Button onClick={() => navigate("/subscription")}>
+              <Button onClick={() => navigate("/account/subscription")}>
                 {t("account.subscribe")}
               </Button>
             </div>
@@ -91,7 +91,7 @@ export const AccountOverview = () => {
                   ? new Date(subscription.expires_at).toLocaleDateString()
                   : "—"}
               </p>
-              <Button variant="outline" onClick={() => navigate("/subscription")}>
+              <Button variant="outline" onClick={() => navigate("/account/subscription")}>
                 {t("account.manage_subscription")}
               </Button>
             </div>
