@@ -151,8 +151,8 @@ async def subscription_success(
                 
                 if existing_subscription and existing_subscription.is_premium:
                     # Проверяем не истёк ли срок
-                    from datetime import datetime, timezone
-                    if existing_subscription.expires_at and existing_subscription.expires_at > datetime.now(timezone.utc):
+                    from app.utils.datetime import is_expired
+                    if not is_expired(existing_subscription.expires_at):
                         logger.info(f"User {current_user.id} already has active premium subscription")
                         return {"success": True, "message": "Подписка уже активна"}
 

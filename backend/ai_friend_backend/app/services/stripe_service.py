@@ -156,26 +156,26 @@ class StripeService:
     async def _handle_subscription_updated(self, subscription_data: dict):
         """Обновление подписки"""
         from app.database import async_session_maker
-        
+        from datetime import datetime, timezone
+
         stripe_subscription_id = subscription_data['id']
-        
+
         async with async_session_maker() as db:
             result = await db.execute(
                 select(Subscription).where(Subscription.subscription_id == stripe_subscription_id)
             )
             subscription = result.scalar_one_or_none()
-            
+
             if subscription:
                 # Если подписка активна
                 if subscription_data['status'] == 'active':
                     subscription.is_premium = True
-                    from datetime import datetime
                     if subscription_data['current_period_end']:
-                        subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'])
+                        subscription.expires_at = datetime.fromtimestamp(subscription_data['current_period_end'], tz=timezone.utc)
                 # Если отменена
                 elif subscription_data['status'] == 'canceled':
                     subscription.is_premium = False
-                
+
                 await db.flush()
     
     async def _handle_subscription_deleted(self, subscription_data: dict):
